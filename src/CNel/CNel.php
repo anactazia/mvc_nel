@@ -132,7 +132,7 @@ return self::$instance;
     $themeUrl	= $this->request->base_url . "themes/{$themeName}";
     
     // Add stylesheet path to the $nel->data array
-    $this->data['stylesheet'] = "{$themeUrl}/style.css";
+    $this->data['stylesheet'] = "{$themeUrl}/".$this->config['theme']['stylesheet'];
 
     // Include the global functions.php and the functions.php that are part of the theme
     $nel = &$this;
@@ -145,7 +145,11 @@ return self::$instance;
     // Extract $nel->data to own variables and handover to the template file
     extract($this->data);
     extract($this->views->GetData());
-    include("{$themePath}/default.tpl.php");
+if(isset($this->config['theme']['data'])) {
+      extract($this->config['theme']['data']);
+    }
+    $templateFile = (isset($this->config['theme']['template_file'])) ? $this->config['theme']['template_file'] : 'default.tpl.php';
+    include("{$themePath}/{$templateFile}");
   }
 
 }

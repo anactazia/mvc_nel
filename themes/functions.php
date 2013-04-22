@@ -3,7 +3,39 @@
 * Helpers for theming, available for all themes in their template files and functions.php.
 * This file is included right before the themes own functions.php
 */
- 
+ /**
+* Get list of tools.
+*/
+
+function get_tools() {
+  global $nel;
+  return <<<EOD
+<p>Tools:
+<a href="http://validator.w3.org/check/referer">html5</a>
+<a href="http://jigsaw.w3.org/css-validator/check/referer?profile=css3">css3</a>
+<a href="http://jigsaw.w3.org/css-validator/check/referer?profile=css21">css21</a>
+<a href="http://validator.w3.org/unicorn/check?ucn_uri=referer&amp;ucn_task=conformance">unicorn</a>
+<a href="http://validator.w3.org/checklink?uri={$nel->request->current_url}">links</a>
+<a href="http://qa-dev.w3.org/i18n-checker/index?async=false&amp;docAddr={$nel->request->current_url}">i18n</a>
+<!-- <a href="link?">http-header</a> -->
+<a href="http://csslint.net/">css-lint</a>
+<a href="http://jslint.com/">js-lint</a>
+<a href="http://jsperf.com/">js-perf</a>
+<a href="http://www.workwithcolor.com/hsl-color-schemer-01.htm">colors</a>
+<a href="http://dbwebb.se/style">style</a>
+</p>
+
+<p>Docs:
+<a href="http://www.w3.org/2009/cheatsheet">cheatsheet</a>
+<a href="http://dev.w3.org/html5/spec/spec.html">html5</a>
+<a href="http://www.w3.org/TR/CSS2">css2</a>
+<a href="http://www.w3.org/Style/CSS/current-work#CSS3">css3</a>
+<a href="http://php.net/manual/en/index.php">php</a>
+<a href="http://www.sqlite.org/lang.html">sqlite</a>
+<a href="http://www.blueprintcss.org/">blueprint</a>
+</p>
+EOD;
+}
 
 /**
 * Print debuginformation from the framework.
@@ -67,15 +99,19 @@ function get_messages_from_session() {
 function login_menu() {
   $nel = CNel::Instance();
   if($nel->user['isAuthenticated']) {
-    $items = "<a href='http://www.student.bth.se/~anza13/phpmvc/me/" . constant('KMOM') . "/home.php'>Me-Sidan </a>";    
-    $items .= "<a href='" . create_url('user/profile') . "'><img class='gravatar' src='" . get_gravatar(20) . "' alt=''> <br />" . $nel->user['acronym'] . "</a> ";
-    if($nel->user['hasRoleAdministrator']) {
-      $items .= "<a href='" . create_url('acp') . "'>acp</a> ";
+    $items = "<span class='loggedin'><a href='http://www.student.bth.se/~anza13/phpmvc/me/" . constant('KMOM') . "/home.php'>Me-Sidan </a>";    
+
+    if($nel->user['hasRoleAdmin']) {
+      $items .= "<a href='" . create_url('acp') . "'>acp</a> </span>";
     }
-    $items .= "<a href='" . create_url('user/logout') . "'>logout</a> ";
+    else {$items .= "</span>";}
+    $items .= "<span class='gravname'><a href='" . create_url('user/profile') . "'>" . $nel->user['acronym'] . '</a><br />';
+    $items .= "<a href='" . create_url('user/profile') . "'><img class='gravatar' src='" . get_gravatar(20) . "' alt=''></a> <br />";
+    $items .= "<a href='" . create_url('user/logout') . "'>logout</a></span> ";
+    
   } else {
-    $items = "<a href='http://www.student.bth.se/~anza13/phpmvc/me/" . constant('KMOM') . "/home.php'>Me-Sidan </a>";	  
-    $items .= "<a href='" . create_url('user/login') . "'>login</a> ";
+    $items = "<div='loggedout'><a href='http://www.student.bth.se/~anza13/phpmvc/me/" . constant('KMOM') . "/home.php'>Me-Sidan </a>";	  
+    $items .= "<a href='" . create_url('user/login') . "'>login</a> </div>";
     
   }
   return "<nav id='login-menu'>$items</nav>";
@@ -163,7 +199,18 @@ function current_url() {
 
 /**
 * Render all views.
+*
+* @param $region string the region to draw the content in.
 */
-function render_views() {
-  return CNel::Instance()->views->Render();
+function render_views($region='default') {
+  return CNel::Instance()->views->Render($region);
 }
+
+    /**
+    * Check if region has views. Accepts variable amount of arguments as regions.
+    *
+    * @param $region string the region to draw the content in.
+    */
+    function region_has_content($region='default' /*...*/) {
+      return CNel::Instance()->views->RegionHasView(func_get_args());
+    }

@@ -11,7 +11,7 @@ error_reporting(-1);
 ini_set('display_errors', 1);
 
 
-define('KMOM', 'kmom05');
+define('KMOM', 'kmom06');
 
 /**
 * Set what to show as debug or developer information in the get_debug() theme helper.
@@ -94,6 +94,7 @@ $nel->config['language'] = 'en';
 $nel->config['controllers'] = array(
   'index' => array('enabled' => true,'class' => 'CCIndex'),
   'developer' => array('enabled' => true,'class' => 'CCDeveloper'),
+  'theme'     => array('enabled' => true,'class' => 'CCTheme'),
   'guestbook' => array('enabled' => true,'class' => 'CCGuestbook'),
   'content' => array('enabled' => true,'class' => 'CCContent'),
   'blog' => array('enabled' => true,'class' => 'CCBlog'),
@@ -106,7 +107,23 @@ $nel->config['controllers'] = array(
 * Settings for the theme.
 */
 $nel->config['theme'] = array(
-  // The name of the theme in the theme directory
-  'name' => 'core',
+  'name'            => 'grid',            // The name of the theme in the theme directory
+  'stylesheet'      => 'style.php',       // Main stylesheet to include in template files
+  'template_file'   => 'index.tpl.php',   // Default template file, else use default.tpl.php
+  // A list of valid theme regions
+  'regions' => array('flash','featured-first','featured-middle','featured-last',
+    'primary','sidebar','triptych-first','triptych-middle','triptych-last',
+    'footer-column-one','footer-column-two','footer-column-three','footer-column-four',
+    'footer',
+  ),
+  // Add static entries for use in the template file.
+  'data' => array(
+    'header' => 'Nel',
+    'slogan' => 'A PHP-based MVC-inspired CMF',
+    'favicon' => 'penguin.png',
+    'logo' => 'penguin.png',
+    'logo_width'  => 80,
+    'logo_height' => 80,
+    'footer' => '<p>Nel by Anactazia based on Lydia &copy; by Mikael Roos (mos@dbwebb.se)</p>',
+  ),
 );
-
