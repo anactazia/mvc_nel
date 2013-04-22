@@ -1,6 +1,4 @@
 <h1>Guestbook</h1>
-<a href="http://www.student.bth.se/~anza13/phpmvc/me/kmom03/home.php">Tillbaka till Me-Sidan</a><br />
-
 
 <form action="<?=$form_action?>" method='post'>
   <p>

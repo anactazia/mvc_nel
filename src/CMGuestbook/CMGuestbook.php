@@ -1,25 +1,25 @@
 <?php
-// 
-// A model for a guestbok, to show off some basic controller & model-stuff.
-// 
-// @package NelCore
-// 
+/**
+* A model for a guestbok, to show off some basic controller & model-stuff.
+*
+* @package NelCore
+*/
 class CMGuestbook extends CObject implements IHasSQL {
 
 
-// 
-// Constructor
-// 
+/**
+* Constructor
+*/
   public function __construct() {
     parent::__construct();
   }
 
 
-// 
-// Implementing interface IHasSQL. Encapsulate all SQL used by this class.
-// 
-// @param string $key the string that is the key of the wanted SQL-entry in the array.
-// 
+/**
+* Implementing interface IHasSQL. Encapsulate all SQL used by this class.
+*
+* @param string $key the string that is the key of the wanted SQL-entry in the array.
+*/
   public static function SQL($key=null) {
     $queries = array(
       'create table nel_guestbook' => "CREATE TABLE IF NOT EXISTS nel_guestbook (id INTEGER PRIMARY KEY, entry TEXT, created DATETIME default (datetime('now')));",
@@ -34,9 +34,9 @@ class CMGuestbook extends CObject implements IHasSQL {
   }
 
 
-// 
-// Init the guestbook and create appropriate tables.
-// 
+/**
+* Init the guestbook and create appropriate tables.
+*/
   public function Init() {
     try {
       $this->db->ExecuteQuery(self::SQL('create table nel_guestbook'));
@@ -47,9 +47,9 @@ class CMGuestbook extends CObject implements IHasSQL {
   }
   
 
-// 
-// Add a new entry to the guestbook and save to database.
-// 
+/**
+* Add a new entry to the guestbook and save to database.
+*/
   public function Add($entry) {
     $this->db->ExecuteQuery(self::SQL('insert into nel_guestbook'), array($entry));
     $this->session->AddMessage('success', 'Successfully inserted new message.');
@@ -59,18 +59,18 @@ class CMGuestbook extends CObject implements IHasSQL {
   }
   
 
-// 
-// Delete all entries from the guestbook and database.
-// 
+/**
+* Delete all entries from the guestbook and database.
+*/
   public function DeleteAll() {
     $this->db->ExecuteQuery(self::SQL('delete from nel_guestbook'));
     $this->session->AddMessage('info', 'Removed all messages from the database table.');
   }
   
   
-// 
-// Read all entries from the guestbook & database.
-// 
+/**
+* Read all entries from the guestbook & database.
+*/
   public function ReadAll() {
     try {
       return $this->db->ExecuteSelectQueryAndFetchAll(self::SQL('select * from nel_guestbook'));

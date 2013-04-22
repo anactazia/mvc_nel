@@ -1,62 +1,66 @@
 <?php
-// 
-// A container to hold a bunch of views.
-// 
-// @package NelCore
-// 
+/**
+* A container to hold a bunch of views.
+*
+* @package NelCore
+*/
 class CViewContainer {
 
-// 
-// Members
-// 
+/**
+* Members
+*/
 private $data = array();
 private $views = array();
 
 
-// 
-// Constructor
-// 
+/**
+* Constructor
+*/
 public function __construct() { ; }
 
 
-// 
-// Getters.
-// 
-  public function GetData() { return $this->data; }
+/**
+* Getters.
+*/
+public function GetData() { return $this->data; }
   
   
-// 
-// Set the title of the page.
-// 
-// @param $value string to be set as title.
-// 
+/**
+* Set the title of the page.
+*
+* @param $value string to be set as title.
+*/
 public function SetTitle($value) {
-$this->SetVariable('title', $value);
+    return $this->SetVariable('title', $value);
   }
 
 
-// 
-// Set any variable that should be available for the theme engine.
-// 
-// @param $value string to be set as title.
-// 
+/**
+* Set any variable that should be available for the theme engine.
+*
+* @param $value string to be set as title.
+*/
 public function SetVariable($key, $value) {
 $this->data[$key] = $value;
+return $this;
   }
 
-// 
-// Add a view as file to be included and optional variables.
-// 
-// @param $file string path to the file to be included.
-// @param vars array containing the variables that should be avilable for the included file.
-// 
+
+/**
+* Add a view as file to be included and optional variables.
+*
+* @param $file string path to the file to be included.
+* @param vars array containing the variables that should be avilable for the included file.
+*/
 public function AddInclude($file, $variables=array()) {
 $this->views[] = array('type' => 'include', 'file' => $file, 'variables' => $variables);
+return $this;
   }
 
-// 
-// Render all views according to their type.
-// 
+
+/**
+* Render all views according to their type.
+*/
 public function Render() {
 foreach($this->views as $view) {
       switch($view['type']) {

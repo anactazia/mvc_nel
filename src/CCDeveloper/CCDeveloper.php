@@ -1,30 +1,30 @@
 <?php
-// 
-// Controller for development and testing purpose, helpful methods for the developer.
-// 
-// @package NelCore
-// 
+/**
+* Controller for development and testing purpose, helpful methods for the developer.
+*
+* @package NelCore
+*/
 class CCDeveloper extends CObject implements IController {
 
-// 
-// Constructor
-// 
+/**
+* Constructor
+*/
   public function __construct() {
     parent::__construct();
   }
   
   
-// 
-// Implementing interface IController. All controllers must have an index action.
-// 
+/**
+* Implementing interface IController. All controllers must have an index action.
+*/
 public function Index() {	
 $this->Menu();
 }
 
 
-// 
-// Display all items of the CObject.
-// 
+/**
+* Display all items of the CObject.
+*/
 public function DisplayObject() {	
 $this->Menu();
 
@@ -36,9 +36,9 @@ $this->data['main'] .= '<pre>' . htmlent(print_r($this, true)) . '</pre>';
 }
 
 
-// 
-// Create a list of links in the supported ways.
-// 
+/**
+* Create a list of links in the supported ways.
+*/
 public function Links() {	
 $this->Menu();
 
@@ -71,9 +71,9 @@ EOD;
 }
 
 
-// 
-// Create a method that shows the menu, same for all methods
-// 
+/**
+* Create a method that shows the menu, same for all methods
+*/
 private function Menu() {	
 $menu = array('developer', 'developer/index', 'developer/links', 'developer/display-object');
 
@@ -85,8 +85,6 @@ $html .= "<li><a href='" . $this->request->CreateUrl($val) . "'>$val</a>";
 $this->data['title'] = "The Developer Controller";
 $this->data['main'] = <<<EOD
 <h1>Developer</h1>
-<p>This is what you can do for now:</p>
-<a href="http://www.student.bth.se/~anza13/phpmvc/me/kmom03/home.php">Tillbaka till Me-Sidan</a><br />
 
 <ul>
 $html

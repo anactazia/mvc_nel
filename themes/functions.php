@@ -1,16 +1,17 @@
 <?php
-//
-// Helpers for theming, available for all themes in their template files and functions.php.
-// This file is included right before the themes own functions.php
-// 
+/**
+* Helpers for theming, available for all themes in their template files and functions.php.
+* This file is included right before the themes own functions.php
+*/
  
-// 
-// Print debuginformation from the framework.
-// 
+
+/**
+* Print debuginformation from the framework.
+*/
 function get_debug() {
   // Only if debug is wanted.
   $nel = CNel::Instance();
-  if(empty($nel->config['debug'])) {
+  if(empty($ne->config['debug'])) {
     return;
   }
   
@@ -19,7 +20,7 @@ function get_debug() {
   if(isset($nel->config['debug']['db-num-queries']) && $nel->config['debug']['db-num-queries'] && isset($nel->db)) {
     $flash = $nel->session->GetFlash('database_numQueries');
     $flash = $flash ? "$flash + " : null;
-    $html .= "<p>Database made $flash" . $nel->db->GetNumQueries() . " queries.</p>";
+    $html .= "<p>Database made $flash" . $ly->db->GetNumQueries() . " queries.</p>";
   }
   if(isset($nel->config['debug']['db-queries']) && $nel->config['debug']['db-queries'] && isset($nel->db)) {
     $flash = $nel->session->GetFlash('database_queries');
@@ -43,9 +44,9 @@ function get_debug() {
 }
 
 
-// 
-// Get messages stored in flash-session.
-// 
+/**
+* Get messages stored in flash-session.
+*/
 function get_messages_from_session() {
   $messages = CNel::Instance()->session->GetMessages();
   $html = null;
@@ -60,42 +61,75 @@ function get_messages_from_session() {
 }
 
 
-// 
-// Prepend the base_url.
-// 
+/**
+* Login menu. Creates a menu which reflects if user is logged in or not.
+*/
+function login_menu() {
+  $nel = CNel::Instance();
+  if($nel->user['isAuthenticated']) {
+    $items = "<a href='http://www.student.bth.se/~anza13/phpmvc/me/" . constant('KMOM') . "/home.php'>Me-Sidan </a>";    
+    $items .= "<a href='" . create_url('user/profile') . "'><img class='gravatar' src='" . get_gravatar(20) . "' alt=''> <br />" . $nel->user['acronym'] . "</a> ";
+    if($nel->user['hasRoleAdministrator']) {
+      $items .= "<a href='" . create_url('acp') . "'>acp</a> ";
+    }
+    $items .= "<a href='" . create_url('user/logout') . "'>logout</a> ";
+  } else {
+    $items = "<a href='http://www.student.bth.se/~anza13/phpmvc/me/" . constant('KMOM') . "/home.php'>Me-Sidan </a>";	  
+    $items .= "<a href='" . create_url('user/login') . "'>login</a> ";
+    
+  }
+  return "<nav id='login-menu'>$items</nav>";
+}
+
+
+/**
+* Get a gravatar based on the user's email.
+*/
+function get_gravatar($size=null) {
+  return 'http://www.gravatar.com/avatar/' . md5(strtolower(trim(CNel::Instance()->user['email']))) . '.jpg?r=pg&amp;d=wavatar&amp;';
+}
+
+
+/**
+* Prepend the base_url.
+*/
 function base_url($url=null) {
   return CNel::Instance()->request->base_url . trim($url, '/');
 }
 
 
-// 
-// Create a url to an internal resource.
-// 
-function create_url($url=null) {
-  return CNel::Instance()->request->CreateUrl($url);
+/**
+* Create a url to an internal resource.
+*
+* @param string the whole url or the controller. Leave empty for current controller.
+* @param string the method when specifying controller as first argument, else leave empty.
+* @param string the extra arguments to the method, leave empty if not using method.
+*/
+function create_url($urlOrController=null, $method=null, $arguments=null) {
+  return CNel::Instance()->request->CreateUrl($urlOrController, $method, $arguments);
 }
 
 
-// 
-// Prepend the theme_url, which is the url to the current theme directory.
-// 
+/**
+* Prepend the theme_url, which is the url to the current theme directory.
+*/
 function theme_url($url) {
   $nel = CNel::Instance();
   return "{$nel->request->base_url}themes/{$nel->config['theme']['name']}/{$url}";
 }
 
 
-// 
-// Return the current url.
-// 
+/**
+* Return the current url.
+*/
 function current_url() {
   return CNel::Instance()->request->current_url;
 }
 
 
-// 
-// Render all views.
-// 
+/**
+* Render all views.
+*/
 function render_views() {
   return CNel::Instance()->views->Render();
 }
