@@ -1,6 +1,6 @@
 RewriteEngine on
   # Must use RewriteBase on www.student.bth.se, Rewritebase for url /~mos/test is /~mos/test/
-  RewriteBase /~anza13/phpmvc/me/kmom04/mvc_nel/
+  RewriteBase /~anza13/phpmvc/me/kmom05/mvc_nel/
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteRule (.*) index.php/$1 [NC,L]

@@ -6,7 +6,7 @@
 */
 class CFormUserCreate extends CForm {
 
-/**
+  /**
 * Constructor
 */
   public function __construct($object) {

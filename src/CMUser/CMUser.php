@@ -6,13 +6,13 @@
 */
 class CMUser extends CObject implements IHasSQL, ArrayAccess {
 
-/**
+  /**
 * Properties
 */
-  public $profile = array();
+  public $profile;
 
 
-/**
+  /**
 * Constructor
 */
   public function __construct($nel=null) {
@@ -20,10 +20,14 @@ class CMUser extends CObject implements IHasSQL, ArrayAccess {
     $profile = $this->session->GetAuthenticatedUser();
     $this->profile = is_null($profile) ? array() : $profile;
     $this['isAuthenticated'] = is_null($profile) ? false : true;
+    if(!$this['isAuthenticated']) {
+      $this['id'] = 1;
+      $this['acronym'] = 'anonomous';
+    }
   }
 
 
-/**
+  /**
 * Implementing ArrayAccess for $this->profile
 */
   public function offsetSet($offset, $value) { if (is_null($offset)) { $this->profile[] = $value; } else { $this->profile[$offset] = $value; }}
@@ -32,7 +36,7 @@ class CMUser extends CObject implements IHasSQL, ArrayAccess {
   public function offsetGet($offset) { return isset($this->profile[$offset]) ? $this->profile[$offset] : null; }
 
 
-/**
+  /**
 * Implementing interface IHasSQL. Encapsulate all SQL used by this class.
 *
 * @param string $key the string that is the key of the wanted SQL-entry in the array.
@@ -41,15 +45,15 @@ class CMUser extends CObject implements IHasSQL, ArrayAccess {
     $queries = array(
       'drop table nel_user' => "DROP TABLE IF EXISTS nel_user;",
       'drop table nel_group' => "DROP TABLE IF EXISTS nel_groups;",
-      'drop table nel_user2group' => "DROP TABLE IF EXISTS nel_user2groups;",
+      'drop table nel_user2group' => "DROP TABLE IF EXISTS nel_user2Groups;",
       'create table nel_user' => "CREATE TABLE IF NOT EXISTS nel_user (id INTEGER PRIMARY KEY, acronym TEXT KEY, name TEXT, email TEXT, algorithm TEXT, salt TEXT, password TEXT, created DATETIME default (datetime('now')), updated DATETIME default NULL);",
       'create table nel_group' => "CREATE TABLE IF NOT EXISTS nel_groups (id INTEGER PRIMARY KEY, acronym TEXT KEY, name TEXT, created DATETIME default (datetime('now')), updated DATETIME default NULL);",
-      'create table nel_user2group' => "CREATE TABLE IF NOT EXISTS nel_user2groups (idUser INTEGER, idGroups INTEGER, created DATETIME default (datetime('now')), PRIMARY KEY(idUser, idGroups));",
+      'create table nel_user2group' => "CREATE TABLE IF NOT EXISTS nel_user2Groups (idUser INTEGER, idGroups INTEGER, created DATETIME default (datetime('now')), PRIMARY KEY(idUser, idGroups));",
       'insert into nel_user' => 'INSERT INTO nel_user (acronym,name,email,algorithm,salt,password) VALUES (?,?,?,?,?,?);',
       'insert into nel_group' => 'INSERT INTO nel_groups (acronym,name) VALUES (?,?);',
-      'insert into nel_user2group' => 'INSERT INTO nel_user2groups (idUser,idGroups) VALUES (?,?);',
-      'check user password' => 'SELECT * FROM nel_user WHERE (acronym=? OR email=?);',
-      'get group memberships' => 'SELECT * FROM nel_groups AS g INNER JOIN nel_user2groups AS ug ON g.id=ug.idGroups WHERE ug.idUser=?;',
+      'insert into nel_user2group' => 'INSERT INTO nel_user2Groups (idUser,idGroups) VALUES (?,?);',
+      'check nel_user password' => 'SELECT * FROM nel_user WHERE (acronym=? OR email=?);',
+      'get nel_group memberships' => 'SELECT * FROM nel_groups AS g INNER JOIN nel_user2Groups AS ug ON g.id=ug.idGroups WHERE ug.idUser=?;',
       'update profile' => "UPDATE nel_user SET name=?, email=?, updated=datetime('now') WHERE id=?;",
       'update password' => "UPDATE nel_user SET algorithm=?, salt=?, password=?, updated=datetime('now') WHERE id=?;",
      );
@@ -71,6 +75,7 @@ class CMUser extends CObject implements IHasSQL, ArrayAccess {
       $this->db->ExecuteQuery(self::SQL('create table nel_user'));
       $this->db->ExecuteQuery(self::SQL('create table nel_group'));
       $this->db->ExecuteQuery(self::SQL('create table nel_user2group'));
+      $this->db->ExecuteQuery(self::SQL('insert into nel_user'), array('anonomous', 'Anonomous, not authenticated', null, 'plain', null, null));
       $password = $this->CreatePassword('root');
       $this->db->ExecuteQuery(self::SQL('insert into nel_user'), array('root', 'The Administrator', 'root@dbwebb.se', $password['algorithm'], $password['salt'], $password['password']));
       $idRootUser = $this->db->LastInsertId();
@@ -91,7 +96,7 @@ class CMUser extends CObject implements IHasSQL, ArrayAccess {
   }
   
 
-/**
+  /**
 * Login by autenticate the user and password. Store user information in session if success.
 *
 * Set both session and internal properties.
@@ -101,7 +106,7 @@ class CMUser extends CObject implements IHasSQL, ArrayAccess {
 * @returns booelan true if match else false.
 */
   public function Login($akronymOrEmail, $password) {
-    $user = $this->db->ExecuteSelectQueryAndFetchAll(self::SQL('check user password'), array($akronymOrEmail, $akronymOrEmail));
+    $user = $this->db->ExecuteSelectQueryAndFetchAll(self::SQL('check nel_user password'), array($akronymOrEmail, $akronymOrEmail));
     $user = (isset($user[0])) ? $user[0] : null;
     if(!$user) {
       return false;
@@ -113,7 +118,7 @@ class CMUser extends CObject implements IHasSQL, ArrayAccess {
     unset($user['password']);
     if($user) {
       $user['isAuthenticated'] = true;
-      $user['groups'] = $this->db->ExecuteSelectQueryAndFetchAll(self::SQL('get group memberships'), array($user['id']));
+      $user['groups'] = $this->db->ExecuteSelectQueryAndFetchAll(self::SQL('get nel_group memberships'), array($user['id']));
       foreach($user['groups'] as $val) {
         if($val['id'] == 1) {
           $user['hasRoleAdmin'] = true;
@@ -129,7 +134,7 @@ class CMUser extends CObject implements IHasSQL, ArrayAccess {
   }
   
 
-/**
+  /**
 * Logout. Clear both session and internal properties.
 */
   public function Logout() {
@@ -139,7 +144,7 @@ class CMUser extends CObject implements IHasSQL, ArrayAccess {
   }
   
 
-/**
+  /**
 * Create new user.
 *
 * @param $acronym string the acronym.
@@ -152,14 +157,14 @@ class CMUser extends CObject implements IHasSQL, ArrayAccess {
     $pwd = $this->CreatePassword($password);
     $this->db->ExecuteQuery(self::SQL('insert into nel_user'), array($acronym, $name, $email, $pwd['algorithm'], $pwd['salt'], $pwd['password']));
     if($this->db->RowCount() == 0) {
-      $this->AddMessage('error', "Failed to create user.");
+      $this->AddMessage('error', "Failed to create nel_user.");
       return false;
     }
     return true;
   }
   
 
-/**
+  /**
 * Create password.
 *
 * @param $plain string the password plain text to use as base.
@@ -184,7 +189,7 @@ class CMUser extends CObject implements IHasSQL, ArrayAccess {
   }
   
 
-/**
+  /**
 * Check if password matches.
 *
 * @param $plain string the password plain text to use as base.
@@ -205,7 +210,7 @@ class CMUser extends CObject implements IHasSQL, ArrayAccess {
   }
   
 
-/**
+  /**
 * Save user profile to database and update user profile in session.
 *
 * @returns boolean true if success else false.
@@ -217,7 +222,7 @@ class CMUser extends CObject implements IHasSQL, ArrayAccess {
   }
   
   
-/**
+  /**
 * Change user password.
 *
 * @param $plain string plaintext of the new password

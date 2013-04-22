@@ -38,7 +38,7 @@ public function __get($key) {
   }
 
 
-/**
+  /**
 * Get, Set or Unset the authenticated user
 */
   public function SetAuthenticatedUser($profile) { $this->data['authenticated_user'] = $profile; }
@@ -46,14 +46,14 @@ public function __get($key) {
   public function GetAuthenticatedUser() { return $this->authenticated_user; }
 
 
-/**
+   /**
 * Get or Set flash values, to be remembered one page request
 */
   public function SetFlash($key, $value) { $this->data['flash'][$key] = $value; }
   public function GetFlash($key) { return isset($this->flash[$key]) ? $this->flash[$key] : null; }
 
 
-/**
+  /**
 * Add message to be displayed to user on next pageload. Store in flash.
 *
 * @param $type string the type of message, for example: notice, info, success, warning, error.
@@ -74,7 +74,7 @@ public function GetMessages() {
   }
 
 
-/**
+  /**
 * Store values into session.
 */
   public function StoreInSession() {
@@ -82,7 +82,7 @@ public function GetMessages() {
   }
 
 
-/**
+  /**
 * Store values from this object into the session.
 */
   public function PopulateFromSession() {

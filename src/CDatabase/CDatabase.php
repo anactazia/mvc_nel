@@ -15,7 +15,7 @@ class CDatabase {
   private static $queries = array();
 
 
-/**
+  /**
 * Constructor
 */
   public function __construct($dsn, $username = null, $password = null, $driver_options = null) {
@@ -24,7 +24,7 @@ class CDatabase {
   }
   
   
-/**
+  /**
 * Set an attribute on the database
 */
   public function SetAttribute($attribute, $value) {
@@ -32,7 +32,7 @@ class CDatabase {
   }
 
 
-/**
+  /**
 * Getters
 */
   public function GetNumQueries() { return self::$numQueries; }
@@ -51,7 +51,7 @@ class CDatabase {
   }
 
 
-/**
+  /**
 * Execute a SQL-query and ignore the resultset.
 */
   public function ExecuteQuery($query, $params = array()) {
@@ -62,7 +62,7 @@ class CDatabase {
   }
 
 
-/**
+  /**
 * Return last insert id.
 */
   public function LastInsertId() {
@@ -70,7 +70,7 @@ class CDatabase {
   }
 
 
-/**
+  /**
 * Return rows affected of last INSERT, UPDATE, DELETE
 */
   public function RowCount() {

@@ -22,7 +22,7 @@ public function __construct() { ; }
 /**
 * Getters.
 */
-public function GetData() { return $this->data; }
+  public function GetData() { return $this->data; }
   
   
 /**

@@ -13,7 +13,8 @@ class CCIndex extends CObject implements IController {
     parent::__construct();
   }
   
-/**
+
+  /**
 * Implementing interface IController. All controllers must have an index action.
 */
   public function Index() {	
@@ -21,7 +22,8 @@ class CCIndex extends CObject implements IController {
     $this->views->AddInclude(__DIR__ . '/index.tpl.php', array('menu'=>$this->Menu()));
   }
 
-/**
+
+  /**
 * A menu that shows all available controllers/methods
 */
   private function Menu() {	
@@ -41,4 +43,4 @@ class CCIndex extends CObject implements IController {
     return $items;
   }
   
-}
+} 

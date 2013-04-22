@@ -1,6 +1,6 @@
 <?php
 /**
-* Main class for Lydia, holds everything.
+* Main class for Nel, holds everything.
 *
 * @package NelCore
 */
@@ -38,7 +38,7 @@ $this->session = new CSession($this->config['session_key']);
 $this->session->PopulateFromSession();
 
 // Set default date/time-zone
-date_default_timezone_set($this->config['timezone']);
+date_default_timezone_set('UTC');
 
 // Create a database object.
 if(isset($this->config['database'][0]['dsn'])) {
@@ -53,7 +53,7 @@ if(isset($this->config['database'][0]['dsn'])) {
   }
   
   
-/**
+  /**
 * Singleton pattern. Get the instance of the latest created object or create a new one.
 * @return CNel The instance of this class.
 */

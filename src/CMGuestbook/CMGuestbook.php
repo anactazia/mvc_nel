@@ -7,7 +7,7 @@
 class CMGuestbook extends CObject implements IHasSQL {
 
 
-/**
+  /**
 * Constructor
 */
   public function __construct() {
@@ -15,7 +15,7 @@ class CMGuestbook extends CObject implements IHasSQL {
   }
 
 
-/**
+  /**
 * Implementing interface IHasSQL. Encapsulate all SQL used by this class.
 *
 * @param string $key the string that is the key of the wanted SQL-entry in the array.
@@ -34,7 +34,7 @@ class CMGuestbook extends CObject implements IHasSQL {
   }
 
 
-/**
+  /**
 * Init the guestbook and create appropriate tables.
 */
   public function Init() {
@@ -47,7 +47,7 @@ class CMGuestbook extends CObject implements IHasSQL {
   }
   
 
-/**
+  /**
 * Add a new entry to the guestbook and save to database.
 */
   public function Add($entry) {
@@ -59,7 +59,7 @@ class CMGuestbook extends CObject implements IHasSQL {
   }
   
 
-/**
+  /**
 * Delete all entries from the guestbook and database.
 */
   public function DeleteAll() {
@@ -68,7 +68,7 @@ class CMGuestbook extends CObject implements IHasSQL {
   }
   
   
-/**
+  /**
 * Read all entries from the guestbook & database.
 */
   public function ReadAll() {
@@ -80,4 +80,4 @@ class CMGuestbook extends CObject implements IHasSQL {
   }
 
   
-}
+} 

@@ -6,7 +6,7 @@
 */
 class CFormUserProfile extends CForm {
 
-/**
+  /**
 * Constructor
 */
   public function __construct($object, $user) {

@@ -6,7 +6,7 @@
 */
 class CCDeveloper extends CObject implements IController {
 
-/**
+  /**
 * Constructor
 */
   public function __construct() {
@@ -84,8 +84,8 @@ $html .= "<li><a href='" . $this->request->CreateUrl($val) . "'>$val</a>";
 
 $this->data['title'] = "The Developer Controller";
 $this->data['main'] = <<<EOD
-<h1>Developer</h1>
-
+<h1>The Developer Controller</h1>
+<p>This is what you can do for now:</p>
 <ul>
 $html
 </ul>

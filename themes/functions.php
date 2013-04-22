@@ -11,7 +11,7 @@
 function get_debug() {
   // Only if debug is wanted.
   $nel = CNel::Instance();
-  if(empty($ne->config['debug'])) {
+  if(empty($nel->config['debug'])) {
     return;
   }
   
@@ -20,7 +20,7 @@ function get_debug() {
   if(isset($nel->config['debug']['db-num-queries']) && $nel->config['debug']['db-num-queries'] && isset($nel->db)) {
     $flash = $nel->session->GetFlash('database_numQueries');
     $flash = $flash ? "$flash + " : null;
-    $html .= "<p>Database made $flash" . $ly->db->GetNumQueries() . " queries.</p>";
+    $html .= "<p>Database made $flash" . $nel->db->GetNumQueries() . " queries.</p>";
   }
   if(isset($nel->config['debug']['db-queries']) && $nel->config['debug']['db-queries'] && isset($nel->db)) {
     $flash = $nel->session->GetFlash('database_queries');
@@ -86,7 +86,41 @@ function login_menu() {
 * Get a gravatar based on the user's email.
 */
 function get_gravatar($size=null) {
-  return 'http://www.gravatar.com/avatar/' . md5(strtolower(trim(CNel::Instance()->user['email']))) . '.jpg?r=pg&amp;d=wavatar&amp;';
+  return 'http://www.gravatar.com/avatar/' . md5(strtolower(trim(CNel::Instance()->user['email']))) . '.jpg?r=pg&amp;d=wavatar&amp';
+}
+
+
+/**
+* Escape data to make it safe to write in the browser.
+*
+* @param $str string to escape.
+* @returns string the escaped string.
+*/
+function esc($str) {
+  return htmlEnt($str);
+}
+
+
+/**
+* Filter data according to a filter. Uses CMContent::Filter()
+*
+* @param $data string the data-string to filter.
+* @param $filter string the filter to use.
+* @returns string the filtered string.
+*/
+function filter_data($data, $filter) {
+  return CMContent::Filter($data, $filter);
+}
+
+
+/**
+* Display diff of time between now and a datetime.
+*
+* @param $start datetime|string
+* @returns string
+*/
+function time_diff($start) {
+  return formatDateTimeDiff($start);
 }
 
 

@@ -7,7 +7,7 @@
 class CCUser extends CObject implements IController {
 
 
-/**
+  /**
 * Constructor
 */
   public function __construct() {
@@ -15,7 +15,7 @@ class CCUser extends CObject implements IController {
   }
 
 
-/**
+  /**
 * Show profile information of the user.
 */
   public function Index() {
@@ -46,7 +46,7 @@ class CCUser extends CObject implements IController {
   }
   
 
-/**
+  /**
 * Change the password.
 */
   public function DoChangePassword($form) {
@@ -59,7 +59,8 @@ class CCUser extends CObject implements IController {
     $this->RedirectToController('profile');
   }
   
-/**
+
+  /**
 * Save updates to profile information.
 */
   public function DoProfileSave($form) {
@@ -70,7 +71,8 @@ class CCUser extends CObject implements IController {
     $this->RedirectToController('profile');
   }
   
-/**
+
+  /**
 * Authenticate and login a user.
 */
   public function Login() {
@@ -87,7 +89,8 @@ class CCUser extends CObject implements IController {
                 ));
   }
   
-/**
+
+  /**
 * Perform a login of the user as callback on a submitted form.
 */
   public function DoLogin($form) {
@@ -100,7 +103,8 @@ class CCUser extends CObject implements IController {
     }
   }
   
-/**
+
+  /**
 * Logout a user.
 */
   public function Logout() {
@@ -108,7 +112,8 @@ class CCUser extends CObject implements IController {
     $this->RedirectToController('login');
   }
   
-/**
+
+  /**
 * Create a new user.
 */
   public function Create() {
@@ -121,7 +126,8 @@ class CCUser extends CObject implements IController {
                 ->AddInclude(__DIR__ . '/create.tpl.php', array('form' => $form->GetHTML()));
   }
   
-/**
+
+  /**
 * Perform a creation of a user as callback on a submitted form.
 *
 * @param $form CForm the form that was submitted
@@ -144,7 +150,8 @@ class CCUser extends CObject implements IController {
     }
   }
   
-/**
+
+  /**
 * Init the user database.
 */
   public function Init() {
@@ -153,4 +160,4 @@ class CCUser extends CObject implements IController {
   }
   
 
-} 
+}
