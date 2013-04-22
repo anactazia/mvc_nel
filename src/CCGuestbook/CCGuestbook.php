@@ -9,7 +9,7 @@ class CCGuestbook extends CObject implements IController {
   private $guestbookModel;
   
 
-  /**
+/**
 * Constructor
 */
   public function __construct() {
@@ -18,7 +18,7 @@ class CCGuestbook extends CObject implements IController {
   }
 
 
-  /**
+/**
 * Implementing interface IController. All controllers must have an index action.
 * Show a standard frontpage for the guestbook.
 */
@@ -31,7 +31,7 @@ class CCGuestbook extends CObject implements IController {
   }
   
 
-  /**
+/**
 * Handle posts from the form and take appropriate action.
 */
   public function Handler() {
@@ -48,4 +48,4 @@ class CCGuestbook extends CObject implements IController {
   }
   
 
-} 
+}

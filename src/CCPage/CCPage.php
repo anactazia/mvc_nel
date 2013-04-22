@@ -7,7 +7,7 @@
 class CCPage extends CObject implements IController {
 
 
-  /**
+/**
 * Constructor
 */
   public function __construct() {
@@ -15,7 +15,7 @@ class CCPage extends CObject implements IController {
   }
 
 
-  /**
+/**
 * Display an empty page.
 */
   public function Index() {
@@ -27,7 +27,7 @@ class CCPage extends CObject implements IController {
   }
 
 
-  /**
+/**
 * Display a page.
 *
 * @param $id integer the id of the page.
@@ -41,4 +41,4 @@ class CCPage extends CObject implements IController {
   }
 
 
-} 
+}

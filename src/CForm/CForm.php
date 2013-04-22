@@ -6,14 +6,14 @@
 */
 class CFormElement implements ArrayAccess{
 
-/**
+  /**
 * Properties
 */
   public $attributes;
   public $characterEncoding;
   
 
-/**
+  /**
 * Constructor
 *
 * @param string name of the element.
@@ -22,7 +22,7 @@ class CFormElement implements ArrayAccess{
   public function __construct($name, $attributes=array()) {
     $this->attributes = $attributes;
     $this['name'] = $name;
-    if(is_callable('CLydia::Instance()')) {
+    if(is_callable('CNel::Instance()')) {
       $this->characterEncoding = CNel::Instance()->config['character_encoding'];
     } else {
       $this->characterEncoding = 'UTF-8';
@@ -30,7 +30,7 @@ class CFormElement implements ArrayAccess{
   }
   
   
-/**
+  /**
 * Implementing ArrayAccess for this->attributes
 */
   public function offsetSet($offset, $value) { if (is_null($offset)) { $this->attributes[] = $value; } else { $this->attributes[$offset] = $value; }}
@@ -39,7 +39,7 @@ class CFormElement implements ArrayAccess{
   public function offsetGet($offset) { return isset($this->attributes[$offset]) ? $this->attributes[$offset] : null; }
 
 
-/**
+  /**
 * Get HTML code for a element.
 *
 * @returns HTML code for the element.
@@ -67,18 +67,18 @@ class CFormElement implements ArrayAccess{
     }
     
     if($type && $this['type'] == 'submit') {
-        return "<p><input id='$id'{$type}{$class}{$name}{$value}{$autofocus}{$readonly} /></p>\n";
+      return "<span><input id='$id'{$type}{$class}{$name}{$value}{$autofocus}{$readonly} /></span>\n";
     } else if($type && $this['type'] == 'textarea') {
-        return "<p><label for='$id'>$label</label><br><textarea id='$id'{$type}{$class}{$name}{$autofocus}{$readonly}>{$onlyValue}</textarea></p>\n";
+      return "<p><label for='$id'>$label</label><br><textarea id='$id'{$type}{$class}{$name}{$autofocus}{$readonly}>{$onlyValue}</textarea></p>\n";
     } else if($type && $this['type'] == 'hidden') {
-        return "<input id='$id'{$type}{$class}{$name}{$value} />\n";
+      return "<input id='$id'{$type}{$class}{$name}{$value} />\n";
     } else {
       return "<p><label for='$id'>$label</label><br><input id='$id'{$type}{$class}{$name}{$value}{$autofocus}{$readonly} />{$messages}</p>\n";	
     }
   }
 
 
-/**
+  /**
 * Validate the form element value according a ruleset.
 *
 * @param $rules array of validation rules.
@@ -292,7 +292,16 @@ EOD;
 */
   public function GetHTMLForElements() {
     $html = null;
+    $buttonbar = null;
     foreach($this->elements as $element) {
+      // Wrap buttons in buttonbar.
+      if(!$buttonbar && $element['type'] == 'submit') {
+        $buttonbar = true;
+        $html .= '<p>';
+      } else if($buttonbar && $element['type'] != 'submit') {
+        $buttonbar = false;
+        $html .= '</p>';
+      }
       $html .= $element->GetHTML();
     }
     return $html;

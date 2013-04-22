@@ -27,4 +27,4 @@ class CCBlog extends CObject implements IController {
   }
 
 
-}
+} 

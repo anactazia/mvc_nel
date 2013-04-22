@@ -1,0 +1,75 @@
+/**
+* Description: Sample theme for site which extends the Nel grid-theme.
+*/
+@import url(../../../themes/grid/style.css);
+
+html				{
+				background-color:	#FFE2B3;
+				}
+				
+body				{
+				background-color:	#D0DCE1;
+				}
+				
+h1				{
+				text-transform:		uppercase;
+				}
+				
+#outer-wrap-header		{
+				background-color:	#FFE2B3;
+				border-bottom:		2px solid #FFCE80;
+				}
+				
+#outer-wrap-footer		{
+				background-color:	#FFE2B3;
+				}
+				
+a				{
+				color:			#436370;
+				}
+				
+#navbar ul.menu li a.selected	{
+				background-color:	#D0DCE1;
+				border-bottom:		none;
+				}
+				
+.gravatar			{
+				height:			50px;
+				border:			3px solid #000000;
+				margin-left:		10px;
+				float:			right;
+				}
+				
+.login				{
+				text-transform:		uppercase;
+				font-size:		1em;
+				}
+
+.logout				{
+				text-transform:		uppercase;
+				font-size:		1em;
+				float:			right;
+				}
+
+.user				{
+				
+				text-transform:		uppercase;
+				font-size:		1em;
+				float:			right;
+				margin-top:		35px;
+				margin-right:		-63px;
+				text-align:		right;
+				}
+
+.mepage				{
+				text-transform:		uppercase;
+				font-size:		1em;
+				padding-right:		10px;
+				}
+
+.acp				{
+				text-transform:		uppercase;
+				font-size:		1em;
+				padding-right:		10px;
+				}
+

@@ -7,13 +7,13 @@
 class CCContent extends CObject implements IController {
 
 
-  /**
+/**
 * Constructor
 */
   public function __construct() { parent::__construct(); }
 
 
-  /**
+/**
 * Show a listing of all content.
 */
   public function Index() {
@@ -25,7 +25,7 @@ class CCContent extends CObject implements IController {
   }
   
 
-  /**
+/**
 * Edit a selected content, or prepare to create new content if argument is missing.
 *
 * @param id integer the id of the content.
@@ -51,7 +51,7 @@ class CCContent extends CObject implements IController {
   }
   
 
-  /**
+/**
 * Create new content.
 */
   public function Create() {
@@ -59,7 +59,7 @@ class CCContent extends CObject implements IController {
   }
 
 
-  /**
+/**
 * Init the content database.
 */
   public function Init() {

@@ -6,7 +6,7 @@
 */
 class CCDeveloper extends CObject implements IController {
 
-  /**
+/**
 * Constructor
 */
   public function __construct() {

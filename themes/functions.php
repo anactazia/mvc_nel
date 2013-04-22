@@ -3,10 +3,11 @@
 * Helpers for theming, available for all themes in their template files and functions.php.
 * This file is included right before the themes own functions.php
 */
- /**
+ 
+
+/**
 * Get list of tools.
 */
-
 function get_tools() {
   global $nel;
   return <<<EOD
@@ -36,6 +37,7 @@ function get_tools() {
 </p>
 EOD;
 }
+
 
 /**
 * Print debuginformation from the framework.
@@ -69,7 +71,7 @@ function get_debug() {
     $html .= "<hr><h3>Debuginformation</h3><p>The content of CNel:</p><pre>" . htmlent(print_r($nel, true)) . "</pre>";
   }
   if(isset($nel->config['debug']['session']) && $nel->config['debug']['session']) {
-    $html .= "<hr><h3>SESSION</h3><p>The content of CNel->session:</p><pre>" . htmlent(print_r($nel->session, true)) . "</pre>";
+    $html .= "<hr><h3>SESSION</h3><p>The content of CLydia->session:</p><pre>" . htmlent(print_r($nel->session, true)) . "</pre>";
     $html .= "<p>The content of \$_SESSION:</p><pre>" . htmlent(print_r($_SESSION, true)) . "</pre>";
   }
   return $html;
@@ -99,19 +101,20 @@ function get_messages_from_session() {
 function login_menu() {
   $nel = CNel::Instance();
   if($nel->user['isAuthenticated']) {
-    $items = "<span class='loggedin'><a href='http://www.student.bth.se/~anza13/phpmvc/me/" . constant('KMOM') . "/home.php'>Me-Sidan </a>";    
+    $items = "<span class='mepage'><a href='http://www.student.bth.se/~anza13/phpmvc/me/" . constant('KMOM') . "/home.php'>Me-Sidan </a></span>";    
 
     if($nel->user['hasRoleAdmin']) {
-      $items .= "<a href='" . create_url('acp') . "'>acp</a> </span>";
+      $items .= "<span class='acp'><a href='" . create_url('acp') . "'>acp</a> </span>";
     }
     else {$items .= "</span>";}
-    $items .= "<span class='gravname'><a href='" . create_url('user/profile') . "'>" . $nel->user['acronym'] . '</a><br />';
+    $items .= "<span class='logout'><a href='" . create_url('user/logout') . "'>logout</a></span><br /> ";
     $items .= "<a href='" . create_url('user/profile') . "'><img class='gravatar' src='" . get_gravatar(20) . "' alt=''></a> <br />";
-    $items .= "<a href='" . create_url('user/logout') . "'>logout</a></span> ";
+    $items .= "<span class='user'><a href='" . create_url('user/profile') . "'>" . $nel->user['acronym'] . '</a></span>';
+
     
   } else {
-    $items = "<div='loggedout'><a href='http://www.student.bth.se/~anza13/phpmvc/me/" . constant('KMOM') . "/home.php'>Me-Sidan </a>";	  
-    $items .= "<a href='" . create_url('user/login') . "'>login</a> </div>";
+    $items = "<span class='mepage'><a href='http://www.student.bth.se/~anza13/phpmvc/me/" . constant('KMOM') . "/home.php'>Me-Sidan </a></span>";	  
+    $items .= "<span class='login'><a href='" . create_url('user/login') . "'>login</a></span>";
     
   }
   return "<nav id='login-menu'>$items</nav>";
@@ -176,16 +179,29 @@ function base_url($url=null) {
 * @param string the extra arguments to the method, leave empty if not using method.
 */
 function create_url($urlOrController=null, $method=null, $arguments=null) {
-  return CNel::Instance()->request->CreateUrl($urlOrController, $method, $arguments);
+  return CNel::Instance()->CreateUrl($urlOrController, $method, $arguments);
 }
 
 
 /**
 * Prepend the theme_url, which is the url to the current theme directory.
+*
+* @param $url string the url-part to prepend.
+* @returns string the absolute url.
 */
 function theme_url($url) {
-  $nel = CNel::Instance();
-  return "{$nel->request->base_url}themes/{$nel->config['theme']['name']}/{$url}";
+  return create_url(CNel::Instance()->themeUrl . "/{$url}");
+}
+
+
+/**
+* Prepend the theme_parent_url, which is the url to the parent theme directory.
+*
+* @param $url string the url-part to prepend.
+* @returns string the absolute url.
+*/
+function theme_parent_url($url) {
+  return create_url(CNel::Instance()->themeParentUrl . "/{$url}");
 }
 
 
@@ -206,11 +222,12 @@ function render_views($region='default') {
   return CNel::Instance()->views->Render($region);
 }
 
-    /**
-    * Check if region has views. Accepts variable amount of arguments as regions.
-    *
-    * @param $region string the region to draw the content in.
-    */
-    function region_has_content($region='default' /*...*/) {
-      return CNel::Instance()->views->RegionHasView(func_get_args());
-    }
+
+/**
+* Check if region has views. Accepts variable amount of arguments as regions.
+*
+* @param $region string the region to draw the content in.
+*/
+function region_has_content($region='default' /*...*/) {
+  return CNel::Instance()->views->RegionHasView(func_get_args());
+}

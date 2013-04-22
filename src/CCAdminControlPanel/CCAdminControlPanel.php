@@ -6,7 +6,7 @@
 */
 class CCAdminControlPanel extends CObject implements IController {
 
-
+	
 /**
 * Constructor
 */
@@ -14,7 +14,7 @@ class CCAdminControlPanel extends CObject implements IController {
     parent::__construct();
   }
 
-
+  
 /**
 * Show profile information of the user.
 */
@@ -23,5 +23,5 @@ class CCAdminControlPanel extends CObject implements IController {
     $this->views->AddInclude(__DIR__ . '/index.tpl.php');
   }
  
-
-}
+  
+} 
