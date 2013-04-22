@@ -4,7 +4,15 @@
 // 
 // @package NelCore
 // 
-    class CCIndex implements IController {
+class CCIndex extends CObject implements IController {
+
+// 
+// Constructor
+// 
+  public function __construct() {
+    parent::__construct();
+  }
+  
 
 // 
 // Implementing interface IController. All controllers must have an index action.
@@ -18,22 +26,26 @@ public function Index() {
 // Create a method that shows the menu, same for all methods
 // 
 private function Menu() {	
-$nel = CNel::Instance();
-$menu = array('index', 'index/index', 'developer', 'developer/index', 'developer/links');
+$menu = array(
+'index', 'index/index', 'developer', 'developer/index', 'developer/links',
+'developer/display-object', 'guestbook',
+);
 
 $html = null;
 foreach($menu as $val) {
-$html .= "<li><a href='" . $nel->request->CreateUrl($val) . "'>$val</a>";
+$html .= "<li><a href='" . $this->request->CreateUrl($val) . "'>$val</a>";
 }
 
-$nel->data['title'] = "The Index Controller";
-$nel->data['main'] = <<<EOD
-<h1>The Index Controller</h1>
+$this->data['title'] = "The Index Controller";
+$this->data['main'] = <<<EOD
+<h1>Index</h1>
 <p>This is what you can do for now:</p>
+<a href="http://www.student.bth.se/~anza13/phpmvc/me/kmom03/home.php">Tillbaka till Me-Sidan</a><br />
+
 <ul>
 $html
 </ul>
 EOD;
   }
   
-} 
+}

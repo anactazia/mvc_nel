@@ -11,6 +11,20 @@ error_reporting(-1);
 ini_set('display_errors', 1);
 
 // 
+// Set what to show as debug or developer information in the get_debug() theme helper.
+// 
+$nel->config['debug']['nel'] = false;
+$nel->config['debug']['session'] = false;
+$nel->config['debug']['timer'] = true;
+$nel->config['debug']['db-num-queries'] = true;
+$nel->config['debug']['db-queries'] = true;
+
+// 
+// Set database(s).
+// 
+$nel->config['database'][0]['dsn'] = 'sqlite:' . NEL_SITE_PATH . '/data/.ht.sqlite';
+
+// 
 // What type of urls should be used?
 // 
 // default      = 0      => index.php/controller/method/arg1/arg2/arg3
@@ -28,6 +42,7 @@ $nel->config['url_type'] = 1;
 // Define session name
 //
 $nel->config['session_name'] = preg_replace('/[:\.\/-_]/', '', $_SERVER["SERVER_NAME"]);
+$nel->config['session_key'] = 'nel';
 
 //
 // Define server timezone
@@ -56,6 +71,7 @@ $nel->config['language'] = 'en';
 $nel->config['controllers'] = array(
   'index'     => array('enabled' => true,'class' => 'CCIndex'),
   'developer' => array('enabled' => true,'class' => 'CCDeveloper'),
+  'guestbook' => array('enabled' => true,'class' => 'CCGuestbook'),
 );
     
 // 

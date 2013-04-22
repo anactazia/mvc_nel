@@ -1,18 +1,18 @@
 <?php
-//
+// 
 // Parse the request and identify controller, method and arguments.
-//
+// 
 // @package NelCore
-//
-    class CRequest {
-    	    
+// 
+class CRequest {
+
 // 
 // Member variables
 // 
-	public $cleanUrl;
-	public $querystringUrl;
-	
-// 
+public $cleanUrl;
+  public $querystringUrl;
+
+
 // 
 // Constructor
 // 
@@ -26,11 +26,25 @@ public function __construct($urlType=0) {
     $this->querystringUrl = $urlType= 2 ? true : false;
 }
 
+
 // 
 // Create a url in the way it should be created.
 // 
+// @param $url string the relative url or the controller
+// @param $method string the method to use, $url is then the controller or empty for current
 // 
-  public function CreateUrl($url=null) {
+public function CreateUrl($url=null, $method=null) {
+    // If fully qualified just leave it.
+if(!empty($url) && (strpos($url, '://') || $url[0] == '/')) {
+return $url;
+}
+    
+    // Get current controller if empty and method choosen
+    if(empty($url) && !empty($method)) {
+      $url = $this->controller;
+    }
+    
+    // Create url according to configured style
     $prepend = $this->base_url;
     if($this->cleanUrl) {
       ;
@@ -39,24 +53,30 @@ public function __construct($urlType=0) {
     } else {
       $prepend .= 'index.php/';
     }
-    return $prepend . rtrim($url, '/');
+    return $prepend . rtrim("$url/$method", '/');
   }
-	
-	
+
+
 // 
 // Init the object by parsing the current url request.
 // 
-public function Init($baseUrl = null) {
+  public function Init($baseUrl = null) {
 // Take current url and divide it in controller, method and arguments
 $requestUri = $_SERVER['REQUEST_URI'];
 $scriptPart = $scriptName = $_SERVER['SCRIPT_NAME'];
-       
+
 // Check if url is in format controller/method/arg1/arg2/arg3
 if(substr_compare($requestUri, $scriptName, 0)) {
 $scriptPart = dirname($scriptName);
 }
 
-$query = trim(substr($requestUri, strlen(rtrim($scriptPart, '/'))), '/');	
+// Set query to be everything after base_url, except the optional querystring
+$query = trim(substr($requestUri, strlen(rtrim($scriptPart, '/'))), '/');
+$pos = strcspn($query, '?');
+    if($pos) {
+      $query = substr($query, 0, $pos);
+    }
+    
 // Check if this looks like a querystring approach link
     if(substr($query, 0, 1) === '?' && isset($_GET['q'])) {
       $query = trim($_GET['q']);
@@ -99,5 +119,6 @@ public function GetCurrentUrl() {
     $url .= $_SERVER["SERVER_NAME"] . $serverPort . htmlspecialchars($_SERVER["REQUEST_URI"]);
 return $url;
 }
+
 
 }

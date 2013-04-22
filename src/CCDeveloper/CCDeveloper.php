@@ -4,38 +4,59 @@
 // 
 // @package NelCore
 // 
-class CCDeveloper implements IController {
+class CCDeveloper extends CObject implements IController {
 
+// 
+// Constructor
+// 
+  public function __construct() {
+    parent::__construct();
+  }
+  
+  
 // 
 // Implementing interface IController. All controllers must have an index action.
 // 
-  public function Index() {  
-    $this->Menu();
-  }
+public function Index() {	
+$this->Menu();
+}
+
+
+// 
+// Display all items of the CObject.
+// 
+public function DisplayObject() {	
+$this->Menu();
+
+$this->data['main'] .= <<<EOD
+<h2>Dumping content of CDeveloper</h2>
+<p>Here is the content of the controller, including properties from CObject which holds access to common resources in CNel.</p>
+EOD;
+$this->data['main'] .= '<pre>' . htmlent(print_r($this, true)) . '</pre>';
+}
+
 
 // 
 // Create a list of links in the supported ways.
 // 
-  public function Links() {  
-    $this->Menu();
-    
-    $nel = CNel::Instance();
-    
-    $url = 'developer/links';
-    $current      = $nel->request->CreateUrl($url);
+public function Links() {	
+$this->Menu();
 
-    $nel->request->cleanUrl = false;
-    $nel->request->querystringUrl = false;    
-    $default      = $nel->request->CreateUrl($url);
-    
-    $nel->request->cleanUrl = true;
-    $clean        = $nel->request->CreateUrl($url);    
-    
-    $nel->request->cleanUrl = false;
-    $nel->request->querystringUrl = true;    
-    $querystring  = $nel->request->CreateUrl($url);
-    
-    $nel->data['main'] .= <<<EOD
+$url = 'developer/links';
+$current = $this->request->CreateUrl($url);
+
+$this->request->cleanUrl = false;
+$this->request->querystringUrl = false;	
+$default = $this->request->CreateUrl($url);
+
+$this->request->cleanUrl = true;
+$clean = $this->request->CreateUrl($url);	
+
+$this->request->cleanUrl = false;
+$this->request->querystringUrl = true;	
+$querystring = $this->request->CreateUrl($url);
+
+$this->data['main'] .= <<<EOD
 <h2>CRequest::CreateUrl()</h2>
 <p>Here is a list of urls created using above method with various settings. All links should lead to
 this same page.</p>
@@ -47,28 +68,30 @@ this same page.</p>
 </ul>
 <p>Enables various and flexible url-strategy.</p>
 EOD;
-  }
-  
+}
+
+
 // 
 // Create a method that shows the menu, same for all methods
 // 
-  private function Menu() {  
-    $nel = CNel::Instance();
-    $menu = array('developer', 'developer/index', 'developer/links');
-    
-    $html = null;
-    foreach($menu as $val) {
-      $html .= "<li><a href='" . $nel->request->CreateUrl($val) . "'>$val</a>";  
-    }
-    
-    $nel->data['title'] = "The Developer Controller";
-    $nel->data['main'] = <<<EOD
-<h1>The Developer Controller</h1>
+private function Menu() {	
+$menu = array('developer', 'developer/index', 'developer/links', 'developer/display-object');
+
+$html = null;
+foreach($menu as $val) {
+$html .= "<li><a href='" . $this->request->CreateUrl($val) . "'>$val</a>";
+}
+
+$this->data['title'] = "The Developer Controller";
+$this->data['main'] = <<<EOD
+<h1>Developer</h1>
 <p>This is what you can do for now:</p>
+<a href="http://www.student.bth.se/~anza13/phpmvc/me/kmom03/home.php">Tillbaka till Me-Sidan</a><br />
+
 <ul>
 $html
 </ul>
 EOD;
   }
   
-}
+} 

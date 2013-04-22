@@ -19,3 +19,10 @@ require_once($file2);
 }
 }
 spl_autoload_register('autoload');
+
+// 
+// Helper, wrap html_entites with correct character encoding
+// 
+function htmlent($str, $flags = ENT_COMPAT) {
+  return htmlentities($str, $flags, CNel::Instance()->config['character_encoding']);
+}
